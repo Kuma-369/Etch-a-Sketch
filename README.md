@@ -1,0 +1,1 @@
+The Odin Project: Etch-a-Sketch game in a browser using DOM manipulation skills.
