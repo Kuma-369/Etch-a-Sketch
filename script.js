@@ -38,13 +38,15 @@ function createGrid(total, squarePerSide) {
 function createButton(){
     const gridSize = document.querySelector(".gridSize");
     gridSize.addEventListener("click", (e) => {
-        let number = prompt("Enter the number of squares per side.");
+        let number = prompt("Enter the number of squares per side from 1 to 100.");
 
         if (number > 100) {
             alert("Please enter a number less than or equal to 100.");
-        } else {
+        } else if (number > 0 && number < 101) {
         container.replaceChildren();
         createGrid(number * number, number);
+        } else {
+            alert("Please enter a valid integer from 1 to 100.");
         }
     })
 }
@@ -58,10 +60,31 @@ function resetGrid(){
     });
 }
 
+// set the colour to black
 function blackInk(){
     const blackInk = document.querySelector(".black");
     blackInk.addEventListener("click", (e) => {
-        currentMode = "black"
+        currentMode = "black";
+    })
+}
+
+// set the colour to random colour
+function colorMode(){
+    const colorMode = document.querySelector(".randomColor");
+    colorMode.addEventListener("click", (e) => {
+        currentMode = "rainbow";
+    }
+    )
+}
+
+function newCreateGrid(){
+
+}
+
+function clickDrag(){
+    const clickDrag = document.querySelector(".clickDrag");
+    clickDrag.addEventListener("click", () => {
+
     })
 }
 
@@ -69,3 +92,4 @@ createGrid(total, rowColumns.row);
 createButton();
 resetGrid();
 blackInk();
+colorMode();
