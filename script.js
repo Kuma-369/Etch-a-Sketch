@@ -6,6 +6,13 @@ const total = rowColumns.row * rowColumns.column;
 
 let currentMode = "rainbow";
 
+// drawing method: hover or click & drag
+let currentMethod = "hover";
+let isDrawing = false;
+
+window.addEventListener("mousedown", () => isDrawing = true);
+window.addEventListener("mouseup", () => isDrawing = false);
+
 function createGrid(total, squarePerSide) {
     // create grid of square divs
     for (let i = 0; i < total; i++) {
@@ -21,23 +28,53 @@ function createGrid(total, squarePerSide) {
         container.appendChild(div);
 
         // randomly generate rgb value 
-        // change the color in the grid container when mouse enters a div
-        div.addEventListener("mouseenter", (e) => {
+        // change the colour in the grid container when mouse enters a div
+        // change colour mode to random colour or black 
+        function colorDiv() {
             if (currentMode === "rainbow"){
-                let randomColor = Math.floor(Math.random()*16777215).toString(16)
-                let rgbValue = "#" + randomColor
+                let randomColor = Math.floor(Math.random()*16777215).toString(16);
+                let rgbValue = "#" + randomColor;
                 div.style.backgroundColor = rgbValue;
             } else {
                 div.style.backgroundColor = "black";
             }
-    });
+        }
+
+        // checks if click-drag rules are active
+        div.addEventListener("mouseenter", () => {
+            if (currentMethod === "drag" && !isDrawing) return;
+            colorDiv();
+        });
+
+        // colours the square immediately on click if in drag mode
+        div.addEventListener("mousedown", () => {
+            if (currentMethod === "drag") {
+                colorDiv();
+            }
+        });
     }
+}
+
+// change drawing method
+function drawMethodToggle() {
+    const methodBtn = document.querySelector(".clickDrag");
+    if (!methodBtn) return; 
+
+    methodBtn.addEventListener("click", () => {
+        if (currentMethod === "hover") {
+            currentMethod = "drag";
+            methodBtn.textContent = "Hover";
+        } else {
+            currentMethod = "hover";
+            methodBtn.textContent = "Click & Drag";
+        }
+    });
 }
 
 // change grid size with button
 function createButton(){
     const gridSize = document.querySelector(".gridSize");
-    gridSize.addEventListener("click", (e) => {
+    gridSize.addEventListener("click", () => {
         let number = prompt("Enter the number of squares per side from 1 to 100.");
 
         if (number > 100) {
@@ -54,7 +91,7 @@ function createButton(){
 // reset the grid with reset button
 function resetGrid(){
     const resetGridSize = document.querySelector(".reset");
-    resetGridSize.addEventListener("click", (e) => {
+    resetGridSize.addEventListener("click", () => {
         container.replaceChildren();
         createGrid(16 * 16, 16);
     });
@@ -63,7 +100,7 @@ function resetGrid(){
 // set the colour to black
 function blackInk(){
     const blackInk = document.querySelector(".black");
-    blackInk.addEventListener("click", (e) => {
+    blackInk.addEventListener("click", () => {
         currentMode = "black";
     })
 }
@@ -71,21 +108,10 @@ function blackInk(){
 // set the colour to random colour
 function colorMode(){
     const colorMode = document.querySelector(".randomColor");
-    colorMode.addEventListener("click", (e) => {
+    colorMode.addEventListener("click", () => {
         currentMode = "rainbow";
     }
     )
-}
-
-function newCreateGrid(){
-
-}
-
-function clickDrag(){
-    const clickDrag = document.querySelector(".clickDrag");
-    clickDrag.addEventListener("click", () => {
-
-    })
 }
 
 createGrid(total, rowColumns.row);
@@ -93,3 +119,4 @@ createButton();
 resetGrid();
 blackInk();
 colorMode();
+drawMethodToggle();
